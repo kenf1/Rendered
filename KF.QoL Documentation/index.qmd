@@ -1,0 +1,278 @@
+---
+title: "KF.QoL Documentation"
+author: "KF"
+format: 
+    html:
+        code-fold: show
+        code-tools: true
+        toc: true
+        toc-location: left
+execute: 
+  echo: true
+  eval: false
+---
+
+## KF.QoL: A collection of R Custom Functions and Templates
+
+This package is a collection of my frequently-used custom functions and templates with the intended purpose of decreasing the number of repetitive (and often tedious) tasks in R.
+
+### Installation Instructions
+
+#### To install:
+
+The devtools R package is required.
+
+```{r}
+#install.packages("devtools")
+
+devtools::install_github("kenf1/KF.QoL")
+```
+
+#### To remove:
+
+```{r}
+remove.packages("KF.QoL")
+```
+
+### Custom Functions
+
+#### bulkImport
+
+The Need for Speed: Bulk Import
+
+Mass import files from specified Path + File Extension. All cols imported as class char to avoid most formatting issues.
+
+Requires the following packages in addition to base R packages: `tidyverse`, `data.table`, `read_xl`.
+
+Currently supported formats are: `.csv`, `.xls`, `.xlsx`
+
+Function will stop and output error message if FileExtension if not from list of supported formats.
+
+See [`soleImport`](#soleimport) for single file version.
+
+```{r}
+bulkImport(FileExtension,fread=FALSE,FolderPath="./Input",xlsheet=1)
+```
+
+```{r}
+@param FileExtension Supported format from list of currently supported formats. Also used to remove file extension from element name.
+@param fread (`TRUE`/`FALSE`) If `TRUE`, will use fread to read as DT. Although it is faster, this option is only available for csv format only. Default is `FALSE`.
+@param FolderPath Where target files are located. Default is `"./Input"`.
+@param xlsheet Which Excel sheet to read and import. Default is `"1"`.
+
+@return List of DF or DT where each element of the list (same name as file name) contains the contents of a single imported file.
+```
+
+#### DTfiler
+
+The Need for Speed: Fast Subset
+
+Fast subset of DF cols using DT tools.
+
+```{r}
+DTfilter(dfName,purpose,varName,toDF=FALSE)
+```
+
+```{r}
+@param dfName Input DF.
+@param purpose (`"keep"`/`"remove"`) Use `"keep"` to keep and `"remove"` to remove the specified cols.
+@param varName Names of vars. Can be in form of : col num, string, or list of strings.
+@param toDF (`TRUE`/`FALSE`) If `TRUE`, will convert back to class DF Default is `FALSE`.
+
+@return Either DF or DT & keep or remove specified cols.
+```
+
+#### extractText
+
+Extract Text from Image
+
+Uses [Google's OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) engine to extract text from images. This function is just a wrapper of multiple steps found in [Tesseract documentation](https://docs.ropensci.org/tesseract/articles/intro.html).
+
+
+```{r}
+extractText(imagePath,ocrLang="eng",loadLibrary=FALSE)
+```
+
+```{r}
+@param imagePath Path of image to extract text from.
+@param ocrLang Language of text in image.
+@param loadLibrary Will load tesseract library if set to `TRUE`. Default is `FALSE`.
+
+@return Extracted text in console.
+```
+
+#### fix_Excel_date
+
+Fix Excel date format issue
+
+Converts Excel date to a format R/Lubridate can work with.
+
+```{r}
+fix_Excel_date(value)
+```
+
+```{r}
+@param value Excel date entry.
+
+@return Tidy date format in form of `%m/%d/%y`. Can further modify using Lubridate package.
+```
+
+#### match_n_fill
+
+Fill in target DF using matches from another DF
+
+Very common occurrence. Very useful. 10/10, would recommend.
+
+```{r}
+match_n_fill(ref_1,ref_2,fill_with)
+```
+
+```{r}
+@param ref_1 Matching var/entry in source DF.
+@param ref_2 Matching var/entry in target DF.
+@param fill_with Target DF.
+
+@return Target DF with additional content.
+```
+
+#### origLvl
+
+Show/Count distinct levels
+
+A custom function/wrapper for `unique()` and `length(unique())`. Use-case depends on user. Can use `$` or `[[]]` notation.
+
+```{r}
+origLvl(dfName,varName=NULL,length=FALSE)
+```
+
+```{r}
+@param dfName Input DF. Can use `$` notation for both single DF or nested DF.
+@param varName Can be used to pass either var name or col num. Default is NULL.
+@param length (TRUE/FALSE) If FALSE, will print out all levels. If TRUE, will only print out length. Default is FALSE.
+
+@return Prints either all unique levels within specified DF$var or just the length in console.
+```
+
+#### rmAllNA
+
+Out of sight, out of mind
+
+Why waste storage saving a bunch of unnecessary all NA columns when you can remove it to save on computation time and costs? This function removes all cols where everything is NA.
+
+User needs to manually save results.
+
+```{r}
+rmAllNA(dfName)
+```
+
+```{r}
+@param dfName Input DF.
+
+@return DF where columns with 100% NA are removed.
+```
+
+#### rmSomeNA_col
+
+Out of sight, out of mind (col version)
+
+Removes col(s) that are equal to/exceeds col missingness threshold.
+
+```{r}
+rmSomeNA_col(dfName,comparisonSign,threshold)
+```
+
+```{r}
+@param dfName Input DF.
+@param comparisonSign Options are ">" and ">=".
+@param threshold Col missingness threshold.
+
+@return DF where columns with threshold NA are removed.
+```
+
+See [`rmSomeNA_row`](#rmSomeNA_row) for rows version.
+
+#### rmSomeNA_row
+
+Out of sight, out of mind (row version)
+
+Removes row(s) that are equal to/exceeds row missingness threshold.
+
+```{r}
+rmSomeNA_row(dfName,comparisonSign,threshold)
+```
+
+```{r}
+@param dfName Input DF.
+@param comparisonSign Options are ">" and ">=".
+@param threshold Row missingness threshold.
+
+@return DF where rows with threshold NA are removed.
+```
+
+See [`rmSomeNA_col`](#rmSomeNA_col) for cols version.
+
+#### singleLvls
+
+Levels within specified DF$var (Depreciated)
+
+Show/Count number of unique levels within specified DF$var.
+
+For DF nested within a list, use `$` notation.
+
+```{r}
+singleLvls(dfName,varName,showLevels=TRUE)
+```
+
+```{r}
+@param dfName Input DF.
+@param varName Input var.
+@param showLevels (`TRUE`/`FALSE`) If `TRUE`, will print out all levels. If `FALSE`, will only print out length. Default is `TRUE`.
+
+@return Prints either all unique levels within specified DF$var or just the length in console.
+```
+
+#### soleImport
+
+The Need for Speed: Sole Import
+
+Import specified file with all cols imported as class char to avoid most formatting issues.
+
+Requires the following packages in addition to base R packages: `tidyverse`, `data.table`, `read_xl`.
+
+Currently supported formats are: `.csv`, `.xls`, `.xlsx`
+
+```{r}
+soleImport(File,fread=FALSE,xlsheet=1)
+```
+
+```{r}
+@param File File Path + Name + Extension of file.
+@param fread (`TRUE`/`FALSE`) If `TRUE`, will use fread to read as DT. Although it is faster, this option is only available for csv format only. Default is `FALSE`. If `TRUE`, will replace all "" with `NA`.
+@param xlsheet Which Excel sheet to read and import. Default is `"1"`.
+
+@return Single DF/DT containing contents of imported file.
+```
+
+See [`bulkImport`](#bulkimport) for multiple files version.
+
+### Custom Rmd Templates
+
+#### General (HTML Output)
+
+A general all-purpose template with granular theming options.
+
+#### Quick Reports (HTML Output)
+
+A custom template to generate quick reports.
+
+#### Shiny (App Output)
+
+A custom template for creating Shiny apps.
+
+#### Test Code (No Output)
+
+A custom template to store/test code.
+
+#### Xaringan Presentation
+
+A custom template to generate Xaringan HTML slides with granular control and theming options.
