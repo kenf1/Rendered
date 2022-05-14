@@ -63,7 +63,7 @@ bulkImport(FileExtension,fread=FALSE,FolderPath="./Input",xlsheet=1)
 @return List of DF or DT where each element of the list (same name as file name) contains the contents of a single imported file.
 ```
 
-#### DTfiler
+#### DTfilter
 
 The Need for Speed: Fast Subset
 
@@ -260,6 +260,10 @@ See [`bulkImport`](#bulkimport) for multiple files version.
 #### General (HTML Output)
 
 A general all-purpose template with granular theming options.
+
+#### Py in R (HTML Output)
+
+A general all-purpose template for workflows containing both R and Python code.
 
 #### Quick Reports (HTML Output)
 

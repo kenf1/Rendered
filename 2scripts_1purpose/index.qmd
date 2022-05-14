@@ -1,0 +1,60 @@
+---
+title: "2 Scripts, 1 Purpose"
+subtitle: "Webscraping the same site with both Python and R"
+author: "KF"
+date: today
+date-format: long
+format: 
+  html:
+    toc: true
+    toc-location: left
+execute: 
+  echo: true
+  eval: false
+---
+
+## Background
+
+What started out as a small-scale simple exploratory data analysis (EDA) side-project ([Kaggle_ITTF](https://github.com/kenf1/Kaggle_ITTF)) on the [Kaggle ITTF rankings dataset](https://www.kaggle.com/datasets/romanzdk/ittf-table-tennis-player-rankings-and-information) (from years 2001 to 2020) slowly turned into a larger Data Science project as I began to branch out from the central theme of the sport of Table Tennis.
+
+This sub-project `2 Scripts, 1 Purpose` was one such branch. Wanting to view the most recent rankings (as of writing this report), I set out to obtain the data myself by webscraping the [ITTF Men's Singles Ranking website](https://www.ittf.com/wp-content/uploads/2022/05/2022_19_SEN_MS.html).
+
+The purpose of this report is to summarize my experiences using both Python and R to webscrape, wrangle, and create a bargraph displaying the scraped data.
+
+### What is webscraping?
+
+Webscraping is the method of collecting data from website(s) through automated requests.
+
+## Python versus R for webscraping, my experiences with both
+
+### Python webscraping with [BeautifulSoup](https://beautiful-soup-4.readthedocs.io/en/latest/)
+
+I started this sub-project using Python because of the wide array of options to choose from. BeautifulSoup, lxml, and Selenium are all viable options although each has their pros and cons. I ultimately decided to use BeautifulSoup because it was what the working example I found used.
+
+The most challenging part of the entire process was storing and wrangling the scraped data in a tidy dataframe. The easiest part was creating the interactive plots.
+
+### R webscraping with [rvest](https://rvest.tidyverse.org/)
+
+Unlike Python, there is only one option for webscraping in R. The rvest package is inspired by Python's BeautifulSoup. Because of the similarities, my experience webscraping with rvest is compariable to BeautifulSoup. Other than syntax, the most challenging and easiest parts were the same.
+
+### Technical Details
+
+Both scripts were written in markdown then rendered to HTML files. The `.qmd` files can be opened with [Quarto](https://quarto.org/) whereas the `.Rmd` files can be opened with [R markdown](https://rmarkdown.rstudio.com/).
+
+## Conclusion
+
+### Disclaimer
+
+Between the two programming languages, I have much more experience coding in R than Python. Even so, it took me an hour longer to write the R script compared to the Python script because I was stuck on separating the components of a string into separate dataframe columns. Part of it was because I had a working example for the Python script but not for the R script. The other part was because I wanted to find a simplier solution using fewer lines of code. Ultimately, I decided to brute force my way through using regular expressions (regex).
+
+### Which to use?
+
+From my limited experience with webscraping, I was able to pick up and use the webscraping packages/modules in both languages relatively quickly by reading the official documentation and/or following guides from others.
+
+For most sites, either programming language works fine. My advice to others in a similar position: choose the programming language they are most comfortable with. I will not give suggestions on which programming language to use for sites with lots of JavaScript or deploys anti-scraping tactics because I am not familiar with these.
+
+A rendered version of my Python script can be found [here](https://kenf1.github.io/Rendered/Scraper-Py/) and R script can be found [here](https://kenf1.github.io/Rendered/Scraper-R/).
+
+### Future Directions
+
+In addition to tidying my code, I plan on automating my script to run once whenever the rankings are updated. A concern I have is if webscraping is allowed in the ITTF website's Terms of Use agreement.

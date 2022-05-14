@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.383">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="KF">
+<meta name="dcterms.date" content="2022-05-14">
+
+<title>2 Scripts, 1 Purpose</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background">Background</a>
+  <ul class="collapse">
+  <li><a href="#what-is-webscraping" id="toc-what-is-webscraping" class="nav-link" data-scroll-target="#what-is-webscraping">What is webscraping?</a></li>
+  </ul></li>
+  <li><a href="#python-versus-r-for-webscraping-my-experiences-with-both" id="toc-python-versus-r-for-webscraping-my-experiences-with-both" class="nav-link" data-scroll-target="#python-versus-r-for-webscraping-my-experiences-with-both">Python versus R for webscraping, my experiences with both</a>
+  <ul class="collapse">
+  <li><a href="#python-webscraping-with-beautifulsoup" id="toc-python-webscraping-with-beautifulsoup" class="nav-link" data-scroll-target="#python-webscraping-with-beautifulsoup">Python webscraping with <span>BeautifulSoup</span></a></li>
+  <li><a href="#r-webscraping-with-rvest" id="toc-r-webscraping-with-rvest" class="nav-link" data-scroll-target="#r-webscraping-with-rvest">R webscraping with <span>rvest</span></a></li>
+  <li><a href="#technical-details" id="toc-technical-details" class="nav-link" data-scroll-target="#technical-details">Technical Details</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a>
+  <ul class="collapse">
+  <li><a href="#disclaimer" id="toc-disclaimer" class="nav-link" data-scroll-target="#disclaimer">Disclaimer</a></li>
+  <li><a href="#which-to-use" id="toc-which-to-use" class="nav-link" data-scroll-target="#which-to-use">Which to use?</a></li>
+  <li><a href="#future-directions" id="toc-future-directions" class="nav-link" data-scroll-target="#future-directions">Future Directions</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">2 Scripts, 1 Purpose</h1>
+<p class="subtitle lead">Webscraping the same site with both Python and R</p>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>KF </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 14, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">Background</h2>
+<p>What started out as a small-scale simple exploratory data analysis (EDA) side-project (<a href="https://github.com/kenf1/Kaggle_ITTF">Kaggle_ITTF</a>) on the <a href="https://www.kaggle.com/datasets/romanzdk/ittf-table-tennis-player-rankings-and-information">Kaggle ITTF rankings dataset</a> (from years 2001 to 2020) slowly turned into a larger Data Science project as I began to branch out from the central theme of the sport of Table Tennis.</p>
+<p>This sub-project <code>2 Scripts, 1 Purpose</code> was one such branch. Wanting to view the most recent rankings (as of writing this report), I set out to obtain the data myself by webscraping the <a href="https://www.ittf.com/wp-content/uploads/2022/05/2022_19_SEN_MS.html">ITTF Men’s Singles Ranking website</a>.</p>
+<p>The purpose of this report is to summarize my experiences using both Python and R to webscrape, wrangle, and create a bargraph displaying the scraped data.</p>
+<section id="what-is-webscraping" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-webscraping">What is webscraping?</h3>
+<p>Webscraping is the method of collecting data from website(s) through automated requests.</p>
+</section>
+</section>
+<section id="python-versus-r-for-webscraping-my-experiences-with-both" class="level2">
+<h2 class="anchored" data-anchor-id="python-versus-r-for-webscraping-my-experiences-with-both">Python versus R for webscraping, my experiences with both</h2>
+<section id="python-webscraping-with-beautifulsoup" class="level3">
+<h3 class="anchored" data-anchor-id="python-webscraping-with-beautifulsoup">Python webscraping with <a href="https://beautiful-soup-4.readthedocs.io/en/latest/">BeautifulSoup</a></h3>
+<p>I started this sub-project using Python because of the wide array of options to choose from. BeautifulSoup, lxml, and Selenium are all viable options although each has their pros and cons. I ultimately decided to use BeautifulSoup because it was what the working example I found used.</p>
+<p>The most challenging part of the entire process was storing and wrangling the scraped data in a tidy dataframe. The easiest part was creating the interactive plots.</p>
+</section>
+<section id="r-webscraping-with-rvest" class="level3">
+<h3 class="anchored" data-anchor-id="r-webscraping-with-rvest">R webscraping with <a href="https://rvest.tidyverse.org/">rvest</a></h3>
+<p>Unlike Python, there is only one option for webscraping in R. The rvest package is inspired by Python’s BeautifulSoup. Because of the similarities, my experience webscraping with rvest is compariable to BeautifulSoup. Other than syntax, the most challenging and easiest parts were the same.</p>
+</section>
+<section id="technical-details" class="level3">
+<h3 class="anchored" data-anchor-id="technical-details">Technical Details</h3>
+<p>Both scripts were written in markdown then rendered to HTML files. The <code>.qmd</code> files can be opened with <a href="https://quarto.org/">Quarto</a> whereas the <code>.Rmd</code> files can be opened with <a href="https://rmarkdown.rstudio.com/">R markdown</a>.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<section id="disclaimer" class="level3">
+<h3 class="anchored" data-anchor-id="disclaimer">Disclaimer</h3>
+<p>Between the two programming languages, I have much more experience coding in R than Python. Even so, it took me an hour longer to write the R script compared to the Python script because I was stuck on separating the components of a string into separate dataframe columns. Part of it was because I had a working example for the Python script but not for the R script. The other part was because I wanted to find a simplier solution using fewer lines of code. Ultimately, I decided to brute force my way through using regular expressions (regex).</p>
+</section>
+<section id="which-to-use" class="level3">
+<h3 class="anchored" data-anchor-id="which-to-use">Which to use?</h3>
+<p>From my limited experience with webscraping, I was able to pick up and use the webscraping packages/modules in both languages relatively quickly by reading the official documentation and/or following guides from others.</p>
+<p>For most sites, either programming language works fine. My advice to others in a similar position: choose the programming language they are most comfortable with. I will not give suggestions on which programming language to use for sites with lots of JavaScript or deploys anti-scraping tactics because I am not familiar with these.</p>
+<p>A rendered version of my Python script can be found <a href="https://kenf1.github.io/Rendered/Scraper-Py/">here</a> and R script can be found <a href="https://kenf1.github.io/Rendered/Scraper-R/">here</a>.</p>
+</section>
+<section id="future-directions" class="level3">
+<h3 class="anchored" data-anchor-id="future-directions">Future Directions</h3>
+<p>In addition to tidying my code, I plan on automating my script to run once whenever the rankings are updated. A concern I have is if webscraping is allowed in the ITTF website’s Terms of Use agreement.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
